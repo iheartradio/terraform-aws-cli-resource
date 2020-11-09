@@ -63,3 +63,10 @@ output "id" {
   value       = null_resource.cli_resource.id
 }
 
+output "assumed_role" {
+  value = local.account_id
+}
+output "assumed_role_command" {
+  value = local.assume_role_cmd
+}
+
