@@ -45,17 +45,11 @@ resource "null_resource" "cli_resource" {
   triggers = {
     # By depending on the null_resource, the cli resource effectively depends on the existance
     # of the resources identified by the ids provided via the dependency_ids list variable.
-    depends_on = null_resource.dependencies
+    depends_on = join(",", var.dependency_ids)
     destroyCmd = "${var.role == 0 ? "" : "${local.assume_role_cmd} && "}${var.destroy_cmd}"
     createCmd  = "${var.role == 0 ? "" : "${local.assume_role_cmd} && "}${var.cmd}"
   }
 
-}
-
-resource "null_resource" "dependencies" {
-  triggers = {
-    dependencies = join(",", var.dependency_ids)
-  }
 }
 
 output "id" {
