@@ -26,7 +26,7 @@ data "aws_caller_identity" "id" {
 }
 
 locals {
-  account_id      = var.account_id == 0 ? data.aws_caller_identity.id.account_id : var.account_id
+  account_id      = var.account_id == "0" ? data.aws_caller_identity.id.account_id : var.account_id
   assume_role_cmd = "source ${path.module}/assume_role.sh ${local.account_id} ${var.role}"
 }
 
@@ -47,8 +47,8 @@ resource "null_resource" "cli_resource" {
   triggers = {
     # By depending on the null_resource, the cli resource effectively depends on the existance
     # of the resources identified by the ids provided via the dependency_ids list variable.
-    destroyCmd = "${var.role == 0 ? "" : "${local.assume_role_cmd} && "}${var.destroy_cmd}"
-    createCmd  = "${var.role == 0 ? "" : "${local.assume_role_cmd} && "}${var.cmd}"
+    destroyCmd = "${var.role == "0" ? "" : "${local.assume_role_cmd} && "}${var.destroy_cmd}"
+    createCmd  = "${var.role == "0" ? "" : "${local.assume_role_cmd} && "}${var.cmd}"
   }
 }
 
